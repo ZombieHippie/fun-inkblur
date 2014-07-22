@@ -1,25 +1,88 @@
-head
-  title coffee express
-  link(href="vendors/bootstrap-3.1.1/bootstrap.min.css", rel="stylesheet")
-  meta(http-equiv="Content-Type" content="text/html;charset=utf-8")
-  style.
-    .container { max-width: 750px }
-    .mono { font-family: "Courier New" }
-body
-  .container
-    .page-header.text-center
-      h1 coffee express
-      //pre #! hacking/modding/inventing
-      sub.mono
-        each page, index in views
-          - page = page.slice(0,-5)
-          if index !== 0
-            span &nbsp; - &nbsp;
-          a(href=page)=page
-    block content
+extends layout
 
-  footer
-    //-
-      script(src="vendors/jquery-2.1.1/jquery-2.1.1.min.js")
-      script(src="vendors/bootstrap-3.1.1/bootstrap.min.js")
-    block footer
+block head
+  style.
+    .city { text-align: center; height: 170px; margin: 100px auto 10px }
+    .city .building {
+      background: rgba(0,0,0,0.1);
+      width: 20px;
+      display: inline-block;
+    }
+    .city .building:nth-child(3n+0) { margin-left: 10px }
+    .airline-path {
+      width: 100%; height: 50px; position: absolute;
+      top: 50px; left: 0;
+      z-index: 1;
+      overflow: hidden;
+      animation: airline 3s linear infinite;
+    }
+    @keyframes airline {
+      from, to { transform: translateY(8px); }
+      90%, 10% { transform: translateY(6px); }
+      60%, 40% { transform: translateY(-6px); }
+      50% { transform: translateY(-8px); }
+    }
+    .airplane { /*height: 10px; width: 15px;*/ position: absolute;
+      //background: rgba(0,0,0,0.2);
+      animation: airplane 12s linear infinite;
+      animation-direction: alternate;
+    }
+    .cloud { /*height: 10px; width: 15px;*/ position: absolute;
+      //background: rgba(0,0,0,0.2);
+      animation: cloud 12s linear infinite;
+      animation-direction: alternate;
+    }
+    @keyframes airplane {
+      from, 20% { left: 0%; opacity: 0; }
+      25%, 75% { opacity: 1 }
+      80%, to { left: 100%; opacity: 0; }
+    }
+    @keyframes cloud {
+      from, 20% { transform: translateX(0%); }
+      25%, 75% {  }
+      80%, to { transform: translateX(100%); }
+    }
+    .header-animation { width: 100%; position: relative }
+    article.tile {width: 200px; display: inline-block; margin:8px}
+block header
+  .header-animation
+    .airline-path
+      small.airplane airplane
+    .city
+
+block content
+//-
+  .text-center
+    each category, categoryKey in projects
+      each project, projectKey in category
+        article.tile(class=categoryKey)
+          h3=projectKey
+
+block footer
+  script.
+    createBuilding = function (multi) {
+      if (multi == null)
+        multi = 1
+      var sel = $('.city')
+      var height = sel.height() / 2 + Math.random() * sel.height() * multi / 2
+      $('<div class="building"></div>')
+        .appendTo(sel)
+        .css({height:height})
+    }
+    createCloud = function () {
+      var sel = $('.header-animation')
+      var left = sel.width() / 4 + Math.random() * sel.width() / 2
+      var top = sel.height() / 2 - Math.random() * sel.height()
+      var madeCloud = $('<small class="cloud">cloud</small>')
+        .appendTo('.header-animation')
+        .css({left:left, top:top})
+        .hide()
+        .fadeIn()
+      setTimeout((function(){madeCloud.fadeOut(function(){$(this).remove()})}), 12000 + 12000 * Math.random())
+    }
+    for (var bIndex = -5; bIndex <= 5; bIndex++)
+      createBuilding(1 - Math.abs(bIndex / 5))
+    createCloud()
+    setTimeout(createCloud, 3000)
+    setTimeout(createCloud, 6000)
+    setInterval(createCloud, 13000)

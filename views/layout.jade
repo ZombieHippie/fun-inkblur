@@ -1,0 +1,27 @@
+head
+  title inkblur
+  link(href="vendors/bootstrap-3.1.1/bootstrap.min.css", rel="stylesheet")
+  meta(http-equiv="Content-Type" content="text/html;charset=utf-8")
+  style.
+    .container { max-width: 750px }
+    .mono { font-family: "Courier New" }
+  block head
+  script(src="/vendors/prefixfree/prefixfree.min.js")
+body
+  .container
+    header.page-header.text-center
+      h1 inkblur
+      //pre #! hacking/modding/inventing
+      block header
+      sub.mono
+        each page, index in views
+          - page = page.slice(0,-5)
+          if index !== 0
+            span &nbsp; - &nbsp;
+          a(href=page)=page
+    block content
+
+  footer
+    script(src="/vendors/jquery-2.1.1/jquery.min.js")
+    script(src="/vendors/coffee-script-1.7.1/coffee-script.js")
+    block footer
