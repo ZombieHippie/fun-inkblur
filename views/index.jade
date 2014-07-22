@@ -2,7 +2,7 @@ extends layout
 
 block head
   style.
-    .city { text-align: center; height: 170px; margin: 100px auto 10px }
+    .city { text-align: center; }
     .city .building {
       background: rgba(0,0,0,0.1);
       width: 20px;
@@ -49,6 +49,7 @@ block header
     .airline-path
       small.airplane airplane
     .city
+      img(src="/graphics/inkblur-sky-building.png" width="183" height="240")
 
 block content
 //-
@@ -60,15 +61,6 @@ block content
 
 block footer
   script.
-    createBuilding = function (multi) {
-      if (multi == null)
-        multi = 1
-      var sel = $('.city')
-      var height = sel.height() / 2 + Math.random() * sel.height() * multi / 2
-      $('<div class="building"></div>')
-        .appendTo(sel)
-        .css({height:height})
-    }
     createCloud = function () {
       var sel = $('.header-animation')
       var left = sel.width() / 4 + Math.random() * sel.width() / 2
@@ -80,8 +72,6 @@ block footer
         .fadeIn()
       setTimeout((function(){madeCloud.fadeOut(function(){$(this).remove()})}), 12000 + 12000 * Math.random())
     }
-    for (var bIndex = -5; bIndex <= 5; bIndex++)
-      createBuilding(1 - Math.abs(bIndex / 5))
     createCloud()
     setTimeout(createCloud, 3000)
     setTimeout(createCloud, 6000)
